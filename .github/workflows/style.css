@@ -1,0 +1,32 @@
+ body{
+    
+ }
+ h1{
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+ }
+ th {
+     background-color: #007bff;
+     padding: 10px 0;
+     color: white;
+     border-radius: 0px;
+ }
+
+ tr:nth-child(even) td {
+     background-color: #e6e6e6;
+ }
+
+ table {
+     margin: 10px;
+ }
+
+ td {
+     padding: 10px;
+ }
+
+
+
+
+
+
