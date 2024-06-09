@@ -1,0 +1,78 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <title>Excel Dosyasını Görüntüle</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="tailwind.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    </head>
+    <body>
+        <h1 class="text-6xl my-10 mt-10 font-bold text-center px-3">Kalısterıs Spor Parkları</h1>
+        <div class="font-bold px-3 text-xl flex gap-3">
+        <h3>Son güncelleme tarihi: 9 haziran Pazar</h3>
+        <h3 class="ml-auto">Hazırlayan: <span class="text-red-500">Muhammet Kırmızıkoç</span>
+        </h3>
+        </div>
+        <div class="mb-20" id="data-container"></div>
+
+<!--         
+        <a class="fixed left-0 bottom-0 w-full text-center  p-2 text-2xl font-bold text-gray-700  tracking-wider bg-yellow-400" href="google.com">Donate</a> -->
+    <script>
+        // Sayfa yüklendiğinde çalışacak bir fonksiyon tanımlanıyor
+    window.onload = function() {
+        // 'eles.xlsx' dosyasını fetch API kullanarak getiriyor
+        fetch('eles.xlsx')
+            // Dosya getirildikten sonra, yanıtı bir array buffer'a çeviriyor
+            .then(response => response.arrayBuffer())
+            // Array buffer'ı işleyerek Excel dosyasını okuyor
+            .then(data => {
+                // Excel dosyasını okumak için XLSX kütüphanesi kullanılıyor
+                const workbook = XLSX.read(data, { type: 'array' });
+    
+                // İlk sayfanın adını alıyor
+                const firstSheetName = workbook.SheetNames[0];
+                // İlk sayfanın içeriğini alıyor
+                const worksheet = workbook.Sheets[firstSheetName];
+                // Sayfa içeriğini JSON formatına çeviriyor, başlıkları dahil ediyor
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    
+                // JSON verilerini tablo olarak render eden fonksiyonu çağırıyor
+                renderTable(jsonData);
+            })
+            // Herhangi bir hata oluşursa, hatayı konsola yazdırıyor
+            .catch(error => console.error('Error fetching the Excel file:', error));
+    };
+    
+    // Verileri tablo olarak göstermek için bir fonksiyon tanımlanıyor
+    function renderTable(data) {
+        // 'data-container' ID'li HTML elementini seçiyor
+        const container = document.getElementById('data-container');
+        let html = '<table border="1"><tr>';
+    
+        // Tablo başlıklarını ekliyor
+        data[0].forEach(header => {
+            html += `<th>${header}</th>`;
+        });
+    
+        html += '</tr>';
+    
+        // Tablo verilerini ekliyor
+        data.slice(1).forEach(row => {
+            html += '<tr>';
+            row.forEach(cell => {
+                html += `<td>${cell}</td>`;
+            });
+            html += '</tr>';
+        });
+    
+        html += '</table>';
+        // Oluşturulan HTML'i 'data-container' içine yerleştiriyor
+        container.innerHTML = html;
+    }
+    
+    </script>
+    </body>
+    </html>
